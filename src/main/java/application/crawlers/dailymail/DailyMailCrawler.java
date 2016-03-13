@@ -1,4 +1,4 @@
-package application.services.dailymail;
+package application.crawlers.dailymail;
 
 /**
  * Created by Harry on 13/03/2016.

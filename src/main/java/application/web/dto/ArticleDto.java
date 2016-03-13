@@ -1,12 +1,12 @@
-package application.domain;
-
-import org.springframework.data.annotation.Id;
+package application.web.dto;
 
 import java.time.LocalDateTime;
 
-public class DailyMailRssItem {
+/**
+ * Created by Harry on 13/03/2016.
+ */
+public class ArticleDto {
 
-    @Id
     private String id;
     private String title;
     private String link;

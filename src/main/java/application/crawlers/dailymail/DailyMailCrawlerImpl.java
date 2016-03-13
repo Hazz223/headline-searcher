@@ -1,4 +1,4 @@
-package application.services.dailymail;
+package application.crawlers.dailymail;
 
 import application.domain.*;
 import org.jsoup.Jsoup;
@@ -12,7 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -70,6 +69,7 @@ public class DailyMailCrawlerImpl implements DailyMailCrawler {
 
     private void downloadRssData(List<RssUri> restUris) throws IOException {
 
+        System.out.println("Starting crawl of rss data");
         RssUri articles = restUris.get(0); // there is a lot of data. Currently only grabbing the first reference.
 
         Document document = Jsoup.connect(articles.getUri()).get();
@@ -100,6 +100,8 @@ public class DailyMailCrawlerImpl implements DailyMailCrawler {
         }
 
         this.dailyMailRssFeedRepository.save(dailyMailRssItems);
+
+        System.out.println("Saved: " + dailyMailRssItems.size());
     }
 
     private List<RssUri> rssUriCrawl() throws IOException {

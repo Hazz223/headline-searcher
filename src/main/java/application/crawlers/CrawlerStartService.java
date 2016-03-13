@@ -1,10 +1,9 @@
-package application.services;
+package application.crawlers;
 
-import application.services.dailymail.DailyMailCrawler;
+import application.crawlers.dailymail.DailyMailCrawler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 /**
@@ -20,10 +19,8 @@ public class CrawlerStartService {
         this.dailyMailCrawler = dailyMailCrawler;
     }
 
-    @PostConstruct
     public void startCrawler() throws IOException {
 
         this.dailyMailCrawler.StartCrawl();
-
     }
 }
