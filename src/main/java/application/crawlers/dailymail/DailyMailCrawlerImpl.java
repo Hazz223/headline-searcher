@@ -52,7 +52,6 @@ public class DailyMailCrawlerImpl implements DailyMailCrawler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
 
         try {
@@ -69,8 +68,10 @@ public class DailyMailCrawlerImpl implements DailyMailCrawler {
 
     private void downloadRssData(List<RssUri> restUris) throws IOException {
 
+        this.dailyMailRssFeedRepository.deleteAll();
+
         System.out.println("Starting crawl of rss data");
-        RssUri articles = restUris.get(0); // there is a lot of data. Currently only grabbing the first reference.
+        RssUri articles = restUris.get(0);
 
         Document document = Jsoup.connect(articles.getUri()).get();
 
@@ -79,6 +80,7 @@ public class DailyMailCrawlerImpl implements DailyMailCrawler {
        for (Element item : document.getElementsByTag("item")) {
 
             String title = item.getElementsByTag("title").text();
+            System.out.println(title);
             String link = item.getElementsByTag("link").text();
             String description = item.getElementsByTag("description").text();
             String image = item.getElementsByTag("enclosure").attr("url");

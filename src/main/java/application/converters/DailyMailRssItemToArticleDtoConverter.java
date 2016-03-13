@@ -24,6 +24,7 @@ public class DailyMailRssItemToArticleDtoConverter implements Converter<DailyMai
         articleDto.setImage(source.getImage());
         articleDto.setLink(source.getLink());
         articleDto.setPublicationDate(source.getPublicationDate());
+        articleDto.setTitle(source.getTitle());
 
         return articleDto;
     }

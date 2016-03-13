@@ -43,7 +43,17 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Page<ArticleDto> searchForArticleByText(String searchTerm, Pageable pageable) {
-        return null;
+        Page<DailyMailRssItem> searchResult = this.dailyMailRssFeedRepository.findByTitleContainingIgnoringCaseOrDescriptionContainingIgnoringCase(searchTerm, searchTerm, pageable);
+
+        List<DailyMailRssItem> content = searchResult.getContent();
+
+        List<ArticleDto> articleDtos = new ArrayList<>();
+        for (DailyMailRssItem dailyMailRssItem : content) {
+            ArticleDto articleDto = this.converter.convert(dailyMailRssItem);
+            articleDtos.add(articleDto);
+        }
+
+        return new PageImpl<ArticleDto>(articleDtos, pageable, searchResult.getTotalElements());
     }
 
     @Override
@@ -58,7 +68,6 @@ public class ArticleServiceImpl implements ArticleService {
             ArticleDto articleDto = this.converter.convert(dailyMailRssItem);
             articleDtos.add(articleDto);
         }
-
 
         return new PageImpl<ArticleDto>(articleDtos, pageable, all.getTotalElements());
     }

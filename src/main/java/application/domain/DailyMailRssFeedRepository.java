@@ -15,6 +15,6 @@ public interface DailyMailRssFeedRepository extends MongoRepository<DailyMailRss
 
     Page<DailyMailRssItem> findAll(Pageable pageable);
 
-    Page<DailyMailRssItem> findByTitleContainingIgnoringCaseOrDescriptionContainingIgnoringCase(String term, Pageable pageable);
+    Page<DailyMailRssItem> findByTitleContainingIgnoringCaseOrDescriptionContainingIgnoringCase(String term, String descriptionTerm, Pageable pageable);
 
 }

@@ -1,0 +1,23 @@
+
+.search__header{
+    text-align: center;
+}
+.search__header__main{
+    font-size: 4em;
+}
+
+.search__input__container {
+    width: 100%;
+}
+
+.search__input__row{
+    margin-bottom: 50px;
+}
+
+a {
+    color: inherit;
+}
+
+a:hover {
+    color: #777;
+}
