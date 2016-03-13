@@ -1,4 +1,4 @@
-# headline-searcher
+# Headline Searcher
 Project to search news headlines, both now and in the past
 
 Currently this only searches the Dailymail rss feeds (found here: http://www.dailymail.co.uk/home/article-2684527/RSS-Feeds.html)
