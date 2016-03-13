@@ -29,14 +29,9 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-jdbc")
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.boot:spring-boot-starter-data-rest')
-    compile('org.springframework.boot:spring-boot-starter-mustache')
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile('org.springframework.security:spring-security-crypto:3.1.0.RELEASE')
+    compile('org.springframework.boot:spring-boot-starter')
+    compile('org.jsoup:jsoup:1.8.3')
     compile('com.google.guava:guava:r05')
-    runtime('mysql:mysql-connector-java')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
