@@ -36,26 +36,38 @@ public class DailyMailCrawlerImpl implements DailyMailCrawler {
     @Override
     public void StartCrawl() {
 
+        List<RssUri> rssUris = new ArrayList<>();
+
         if (hasDownloadedRssFeeds()) {
             System.out.println("Has already gotten the RSS uris today. Will get them out of DB instead.");
+            rssUris = this.rssUriRepository.findAll();
         } else {
 
             try {
-                this.rssUriCrawl();
+                rssUris = this.rssUriCrawl();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            // Now i need to crawl the RSS feeds themselves. Woo!
-
         }
+
+
     }
 
     //endregion
 
     //region Private Methods
 
-    private void rssUriCrawl() throws IOException {
+    private void downloadRssData(List<RssUri> restUris){
+
+        // I need to create an object for these rss pages
+
+    }
+
+
+    private List<RssUri> rssUriCrawl() throws IOException {
+
+        this.rssUriRepository.deleteAll(); // cleans the repo beforehand
 
         Document rssDocument = Jsoup.connect(dailyMailUrl).get();
         Elements rssButtons = rssDocument.getElementsByClass("rss");
@@ -71,6 +83,8 @@ public class DailyMailCrawlerImpl implements DailyMailCrawler {
         }
 
         this.rssUriRepository.save(rssUris);
+
+        return rssUris;
     }
 
     private Boolean hasDownloadedRssFeeds() {
