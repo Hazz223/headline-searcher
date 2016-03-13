@@ -1,40 +1,42 @@
 package application.services;
 
+import application.domain.RssUri;
+import application.domain.RssUriRepository;
+import application.services.dailymail.DailyMailCrawler;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Harry on 13/03/2016.
  */
-@Component
+@Service
 public class CrawlerStartService {
 
-    private String dailyMailUrl = "http://www.dailymail.co.uk/home/article-2684527/RSS-Feeds.html";
+    private DailyMailCrawler dailyMailCrawler;
+
+    @Autowired
+    public CrawlerStartService(DailyMailCrawler dailyMailCrawler) {
+        this.dailyMailCrawler = dailyMailCrawler;
+    }
 
     @PostConstruct
     public void startCrawler() throws IOException {
 
-
-        Document rssDocument = Jsoup.connect(dailyMailUrl).get();
-
-
-        Elements rssButtons = rssDocument.getElementsByClass("rss");
-
-        for (Element rssButton : rssButtons) {
-            String uri = rssButton.children().first().attr("href");
-            String rssTitle = rssButton.parent().getElementsByClass("rss-title").first().text();
-
-            break;
-        }
-
-        // I need to load that into a database!
+        this.dailyMailCrawler.StartCrawl();
 
     }
-
 }
