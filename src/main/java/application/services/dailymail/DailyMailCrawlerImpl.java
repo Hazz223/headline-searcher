@@ -76,7 +76,7 @@ public class DailyMailCrawlerImpl implements DailyMailCrawler {
 
         List<DailyMailRssItem> dailyMailRssItems = new ArrayList<>();
 
-        for (Element item : document.getElementsByTag("item")) {
+       for (Element item : document.getElementsByTag("item")) {
 
             String title = item.getElementsByTag("title").text();
             String link = item.getElementsByTag("link").text();
@@ -84,7 +84,6 @@ public class DailyMailCrawlerImpl implements DailyMailCrawler {
             String image = item.getElementsByTag("enclosure").attr("url");
             String pubDate = item.getElementsByTag("pubDate").text();
             String credit = item.getElementsByTag("media:credit").text();
-
 
             LocalDateTime parsed = LocalDateTime.parse(pubDate, DateTimeFormatter.ofPattern("EEE, d MMM yyyy HH:mm:ss +0000"));
 
@@ -105,7 +104,7 @@ public class DailyMailCrawlerImpl implements DailyMailCrawler {
 
     private List<RssUri> rssUriCrawl() throws IOException {
 
-        this.rssUriRepository.deleteAll(); // cleans the repo beforehand
+        this.rssUriRepository.deleteAll();
 
         Document rssDocument = Jsoup.connect(dailyMailUrl).get();
         Elements rssButtons = rssDocument.getElementsByClass("rss");
