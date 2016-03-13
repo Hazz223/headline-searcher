@@ -1,7 +1,6 @@
 package application.services.dailymail;
 
-import application.domain.RssUri;
-import application.domain.RssUriRepository;
+import application.domain.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,6 +12,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,12 +26,15 @@ import java.util.List;
 public class DailyMailCrawlerImpl implements DailyMailCrawler {
 
     private RssUriRepository rssUriRepository;
+    private DailyMailRssFeedRepository dailyMailRssFeedRepository;
     private String dailyMailUrl = "http://www.dailymail.co.uk/home/article-2684527/RSS-Feeds.html";
 
     //region Public Methods
 
+
     @Autowired
-    public DailyMailCrawlerImpl(RssUriRepository rssUriRepository) {
+    public DailyMailCrawlerImpl(DailyMailRssFeedRepository dailyMailRssFeedRepository, RssUriRepository rssUriRepository) {
+        this.dailyMailRssFeedRepository = dailyMailRssFeedRepository;
         this.rssUriRepository = rssUriRepository;
     }
 
@@ -51,6 +56,11 @@ public class DailyMailCrawlerImpl implements DailyMailCrawler {
 
         }
 
+        try {
+            this.downloadRssData(rssUris);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -58,12 +68,40 @@ public class DailyMailCrawlerImpl implements DailyMailCrawler {
 
     //region Private Methods
 
-    private void downloadRssData(List<RssUri> restUris){
+    private void downloadRssData(List<RssUri> restUris) throws IOException {
 
-        // I need to create an object for these rss pages
+        RssUri articles = restUris.get(0); // there is a lot of data. Currently only grabbing the first reference.
 
+        Document document = Jsoup.connect(articles.getUri()).get();
+
+        List<DailyMailRssItem> dailyMailRssItems = new ArrayList<>();
+
+        for (Element item : document.getElementsByTag("item")) {
+
+            String title = item.getElementsByTag("title").text();
+            String link = item.getElementsByTag("link").text();
+            String description = item.getElementsByTag("description").text();
+            String image = item.getElementsByTag("enclosure").attr("url");
+            String pubDate = item.getElementsByTag("pubDate").text();
+            String credit = item.getElementsByTag("media:credit").text();
+
+
+            LocalDateTime parsed = LocalDateTime.parse(pubDate, DateTimeFormatter.ofPattern("EEE, d MMM yyyy HH:mm:ss +0000"));
+
+            DailyMailRssItem dailyMailRssItem = DailyMailRssItemBuilder.aDailyMailRssItem()
+                    .withTitle(title)
+                    .withDescription(description)
+                    .withLink(link)
+                    .withImage(image)
+                    .withCredit(credit)
+                    .withPublicationDate(parsed)
+                    .build();
+
+            dailyMailRssItems.add(dailyMailRssItem);
+        }
+
+        this.dailyMailRssFeedRepository.save(dailyMailRssItems);
     }
-
 
     private List<RssUri> rssUriCrawl() throws IOException {
 
