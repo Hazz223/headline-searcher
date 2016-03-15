@@ -3,7 +3,7 @@ Project to search news headlines, both now and in the past
 
 Currently this only searches the Dailymail rss feeds (found here: http://www.dailymail.co.uk/home/article-2684527/RSS-Feeds.html)
 
-I will soon be including the Huffington post and the Gurdian as well. 
+I will soon be including the Huffington post and the Guardian as well. 
 
 ##Install / usage
 This runs on Springboot. It requires Java 8, and uses gralde as it's build system. Gradle comes packaged with this project. 
